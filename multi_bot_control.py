@@ -11,9 +11,9 @@ load_dotenv()
 main_token = os.getenv("MAIN_TOKEN")
 tokens = os.getenv("TOKENS").split(",")
 
-main_channel_id = "1386973916563767396"
-other_channel_id = "1387406577040101417"
-ktb_channel_id = "1376777071279214662"
+main_channel_id = "1301401315208986657"
+other_channel_id = "1389525218216640574"
+ktb_channel_id = "1389525255269384252"
 
 karuta_id = "646937666251915264"
 bots = []
