@@ -14,8 +14,10 @@ accounts = [
 ]
 
 karuta_id = "646937666251915264"
-ktb_channel_id = "1389525255269384252"
+ktb_channel_id = "1376777071279214662"
+
 fixed_emojis = ["1️⃣", "2️⃣", "3️⃣", "1️⃣", "2️⃣", "3️⃣"]
+grab_times = [1.3, 2.3, 3.0, 1.3, 2.3, 3.0]
 
 bots = []
 
@@ -27,7 +29,7 @@ def create_bot(account, emoji, grab_time):
         if resp.event.ready:
             try:
                 user_id = resp.raw["user"]["id"]
-                print(f"[{account['channel_id']}] → Đăng nhập với user_id: {user_id}")
+                print(f"[{account['channel_id']}] → Đăng nhập thành công với user_id: {user_id}")
             except Exception as e:
                 print(f"Lỗi lấy user_id từ ready: {e}")
 
@@ -37,16 +39,17 @@ def create_bot(account, emoji, grab_time):
             msg = resp.parsed.auto()
             author = msg.get("author", {}).get("id")
             content = msg.get("content", "")
+
             if author == karuta_id and "is dropping 3 cards!" in content:
                 if msg.get("channel_id") == str(account["channel_id"]):
                     time.sleep(grab_time)
-                    bot.addReaction(msg["channel_id"], msg["id"], emoji)
-                    print(f"[{account['channel_id']}] → Thả reaction {emoji}")
                     try:
+                        bot.addReaction(msg["channel_id"], msg["id"], emoji)
+                        print(f"[{account['channel_id']}] → Thả reaction {emoji}")
                         bot.sendMessage(ktb_channel_id, "kt b")
                         print(f"[{account['channel_id']}] → Nhắn 'kt b' ở kênh riêng")
                     except Exception as e:
-                        print(f"[{account['channel_id']}] → Lỗi nhắn kt b: {e}")
+                        print(f"[{account['channel_id']}] → !!! LỖI TRONG QUÁ TRÌNH NHẶT THẺ: {e}")
 
     bots.append(bot)
     threading.Thread(target=bot.gateway.run, daemon=True).start()
@@ -57,23 +60,30 @@ def drop_loop():
     while True:
         acc = accounts[i % acc_count]
         try:
-            bots[i % acc_count].sendMessage(str(acc["channel_id"]), "kd")
+            bot_to_use = bots[i % acc_count]
+            bot_to_use.sendMessage(str(acc["channel_id"]), "kd")
             print(f"[{acc['channel_id']}] → Gửi lệnh k!d từ acc thứ {i % acc_count + 1}")
         except Exception as e:
             print(f"[{acc['channel_id']}] → Drop lỗi: {e}")
+        
         i += 1
         time.sleep(305)
 
 keep_alive()
 
-# Gán thời gian grab cho từng acc
-grab_times = [1.3, 2.3, 3, 1.3, 2.3, 3]
-
 for i, acc in enumerate(accounts):
+    if not acc["token"] or not acc["channel_id"]:
+        print(f"Bỏ qua tài khoản thứ {i+1} do thiếu TOKEN hoặc CHANNEL_ID.")
+        continue
+    
     emoji = fixed_emojis[i % len(fixed_emojis)]
     grab_time = grab_times[i]
     create_bot(acc, emoji, grab_time)
 
+print("Đang chờ các bot đăng nhập...")
+time.sleep(15)
+
+print("Bắt đầu vòng lặp thả thẻ...")
 threading.Thread(target=drop_loop, daemon=True).start()
 
 while True:
