@@ -59,9 +59,9 @@ def react_and_message(bot, msg, emoji, grab_time, account):
 
     try:
         bot.sendMessage(ktb_channel_id, "kt z")
-        print(f"[{account['channel_id']}] → Nhắn 'kt z' ở kênh riêng")
+        print(f"[{account['channel_id']}] → Nhắn 'kt b' ở kênh riêng")
     except Exception as e:
-        print(f"[{account['channel_id']}] → Lỗi nhắn kt z: {e}")
+        print(f"[{account['channel_id']}] → Lỗi nhắn kt b: {e}")
 
 def run_bot(bot, account):
     while True:
@@ -98,4 +98,3 @@ threading.Thread(target=drop_loop, daemon=True).start()
 
 while True:
     time.sleep(60)
-
