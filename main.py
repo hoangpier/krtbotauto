@@ -14,7 +14,7 @@ accounts = [
 ]
 
 karuta_id = "646937666251915264"
-ktb_channel_id = "1398169107647561883"
+ktb_channel_id = "1392480085856092241"
 fixed_emojis = ["1️⃣", "2️⃣", "3️⃣", "1️⃣", "2️⃣", "3️⃣"]
 
 bots = []
@@ -98,3 +98,4 @@ threading.Thread(target=drop_loop, daemon=True).start()
 
 while True:
     time.sleep(60)
+
