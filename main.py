@@ -14,28 +14,23 @@ accounts = [
 ]
 
 karuta_id = "646937666251915264"
-ktb_channel_id = "1392480085856092241"
+ktb_channel_id = os.getenv("KTB_CHANNEL_ID")
 fixed_emojis = ["1️⃣", "2️⃣", "3️⃣", "1️⃣", "2️⃣", "3️⃣"]
 
 bots = []
 
 def create_bot(account, emoji, grab_time):
-    # This line starts the function block
     bot = discum.Client(token=account["token"], log=False)
 
-    # This decorator and function must be indented
     @bot.gateway.command
     def on_ready(resp):
         if resp.event.ready:
             try:
-                # Use the corrected logic from our previous conversation
-                ready_data = resp.parsed.auto()
-                user_id = ready_data['user']['id']
+                user_id = resp.raw["user"]["id"]
                 print(f"[{account['channel_id']}] → Đăng nhập với user_id: {user_id}")
             except Exception as e:
                 print(f"Lỗi lấy user_id từ ready: {e}")
 
-    # This decorator and function must also be indented at the same level
     @bot.gateway.command
     def on_message(resp):
         if resp.event.message:
@@ -56,9 +51,9 @@ def react_and_message(bot, msg, emoji, grab_time, account):
         print(f"[{account['channel_id']}] → Thả reaction {emoji}")
     except Exception as e:
         print(f"[{account['channel_id']}] → Lỗi thả reaction: {e}")
-
+        time.sleep(2)
     try:
-        bot.sendMessage(ktb_channel_id, "kt z")
+        bot.sendMessage(ktb_channel_id, "kt b")
         print(f"[{account['channel_id']}] → Nhắn 'kt b' ở kênh riêng")
     except Exception as e:
         print(f"[{account['channel_id']}] → Lỗi nhắn kt b: {e}")
